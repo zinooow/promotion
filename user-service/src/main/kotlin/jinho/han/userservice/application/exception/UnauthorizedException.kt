@@ -1,0 +1,6 @@
+package jinho.han.userservice.application.exception
+
+class UnauthorizedException : RuntimeException{
+    constructor(): super()
+    constructor(message: String): super(message)
+}
