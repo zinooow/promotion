@@ -1,20 +1,16 @@
-package jinho.han.userservice.adapter.web.dto
+package jinho.han.userservice.dto.response
 
+import jinho.han.userservice.domain.User
 import java.time.LocalDateTime
 
-data class LoginResponse(
-    val token: String,
-    val user: UserResponse
-)
-
 data class UserResponse(
-    val id: Long,
+    val id: Int,
     val name: String,
     val email: String,
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun from(user: jinho.han.userservice.domain.User): UserResponse = UserResponse(
+        fun from(user: User): UserResponse = UserResponse(
             id = user.id!!,
             name = user.name,
             email = user.email,

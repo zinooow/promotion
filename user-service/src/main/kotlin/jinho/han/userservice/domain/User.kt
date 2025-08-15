@@ -1,13 +1,7 @@
 package jinho.han.userservice.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
-import jinho.han.userservice.application.UserCreateRequest
+import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -20,7 +14,7 @@ class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Long? = null,
+    var id: Int? = null,
 
     @Column(name = "name", nullable = false, length = 100)
     var name: String,
@@ -41,10 +35,10 @@ class User(
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
     companion object{
-        fun create(userCreateRequest: UserCreateRequest, passwordEncoder: PasswordEncoder): User = User(
-            name = userCreateRequest.name,
-            email = userCreateRequest.email,
-            passwordHash = passwordEncoder.encode(userCreateRequest.password)
+        fun create(email: String, password: String, name: String, passwordEncoder: PasswordEncoder): User = User(
+            name = name,
+            email = email,
+            passwordHash = passwordEncoder.encode(password)
         )
     }
 }

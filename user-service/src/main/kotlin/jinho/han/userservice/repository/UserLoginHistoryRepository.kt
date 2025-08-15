@@ -1,4 +1,4 @@
-package jinho.han.userservice.adapter.repository
+package jinho.han.userservice.repository
 
 import jinho.han.userservice.domain.UserLoginHistory
 import jinho.han.userservice.domain.User

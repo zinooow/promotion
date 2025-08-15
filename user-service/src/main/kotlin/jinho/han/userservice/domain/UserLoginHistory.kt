@@ -16,7 +16,7 @@ class UserLoginHistory(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Long? = null,
+    var id: Int? = null,
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

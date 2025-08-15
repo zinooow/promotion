@@ -1,22 +1,21 @@
 package jinho.han.userservice.application
 
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import jinho.han.userservice.domain.User
-import org.hibernate.sql.ast.tree.from.StandardTableGroup
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
-import java.util.Date
+import java.util.*
 
 @Service
 class JwtService(
     @Value("\${jwt.secret}")
-    private val secretKey: String,
-    private val passwordEncoder: PasswordEncoder
+    private val secretKey: String
 ) {
 
 
@@ -38,7 +37,10 @@ class JwtService(
     fun validateJwtToken(token: String): Claims {
         try {
             return parseJwtClaims(token)
-        } catch (e: Exception) {
+        } catch(e: ExpiredJwtException){
+            log.error("JWT Token Expired Error : ${e.message}")
+            throw e
+        } catch (e: JwtException) {
             log.error("JWT Token Validation Error : ${e.message}")
             throw e
         }
