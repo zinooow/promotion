@@ -30,7 +30,7 @@ class UserController(
 
     @GetMapping("/me")
     fun getProfile(
-        @RequestHeader("X-USER-ID") userId: Int
+        @RequestHeader("X-USER-ID") userId: Long
     ): ResponseEntity<*> {
         val user: User = userService.getUserById(userId)
         return ResponseEntity.ok(UserResponse.from(user))
@@ -38,7 +38,7 @@ class UserController(
 
     @PutMapping("/me")
     fun updateProfile(
-        @RequestHeader("X-USER-ID") userId: Int,
+        @RequestHeader("X-USER-ID") userId: Long,
         @RequestBody request: UpdateRequest
     ): ResponseEntity<*> {
         val user: User = userService.updateUser(userId, request.name)
@@ -47,7 +47,7 @@ class UserController(
 
     @PostMapping("/me/password")
     fun changePassword(
-        @RequestHeader("X-USER-ID") userId: Int,
+        @RequestHeader("X-USER-ID") userId: Long,
         @RequestBody request: PasswordChangeRequest
     ): ResponseEntity<*> {
         userService.changePassword(userId, request.currentPassword, request.newPassword)
@@ -56,7 +56,7 @@ class UserController(
 
     @GetMapping("/me/login-history")
     fun getLoginHistory(
-        @RequestHeader("X-USER-ID") userId: Int
+        @RequestHeader("X-USER-ID") userId: Long
     ): ResponseEntity<List<UserLoginHistory>> {
         val history: List<UserLoginHistory> = userService.getLoginHistory(userId)
         return ResponseEntity.ok(history)

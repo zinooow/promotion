@@ -26,11 +26,11 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http:localhost:8761/eureka
+      defaultZone: http://localhost:8761/eureka/
     fetch-registry: true
     register-with-eureka: true
 
 
-jjwt:
+jwt:
   secret: a1a2b9c8cddddfac34a429111f59987a4eb1d42accb9eb28493fd4ffe41d33fc
 

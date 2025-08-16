@@ -1,5 +1,6 @@
 package jinho.han.userservice.application
 
+import jinho.han.userservice.application.exception.UnauthorizedAccessException
 import jinho.han.userservice.domain.User
 import jinho.han.userservice.domain.UserLoginHistory
 import jinho.han.userservice.repository.UserLoginHistoryRepository
@@ -17,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
-    val userRepository: UserRepository,
-    val loginHistoryRepository: UserLoginHistoryRepository,
-    val passwordEncoder: PasswordEncoder
+    private val userRepository: UserRepository,
+    private val loginHistoryRepository: UserLoginHistoryRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
 
     fun createUser(email: String, password: String, name: String): User {
@@ -29,26 +30,25 @@ class UserService(
 
         return userRepository.save(user)
     }
-    fun authenticate(request: LoginRequest): User {
-        val user = userRepository.findByEmail(request.email).orElseThrow { UserNotFoundException("이메일이 올바르지 않아 로그인 할 수 없습니다.") }
-        if(user.passwordHash != passwordEncoder.encode(request.password)) { throw UnauthorizedException("비밀번호가 올바르지 않습니다.")
-        }
+    fun authenticate(email: String, password: String): User {
+        val user = userRepository.findByEmail(email).orElseThrow { UserNotFoundException("이메일이 올바르지 않아 로그인 할 수 없습니다.") }
+        if(!passwordEncoder.matches(password, user.passwordHash)) { throw UnauthorizedException("비밀번호가 올바르지 않습니다.")}
         return user
     }
 
-    fun getUserById(userId: Int): User {
+    fun getUserById(userId: Long): User {
         return userRepository.findById(userId).orElseThrow { UserNotFoundException("유저를 찾을 수 없습니다.") }
     }
 
     @Transactional
-    fun updateUser(userId: Int, name: String): User {
+    fun updateUser(userId: Long, name: String): User {
         val user = getUserById(userId)
         user.name = name
         return userRepository.save(user)
     }
 
     @Transactional
-    fun changePassword(userId: Int, currentPassword: String, newPassword: String): User {
+    fun changePassword(userId: Long, currentPassword: String, newPassword: String): User {
         val user = getUserById(userId)
         if(user.passwordHash != passwordEncoder.encode(currentPassword)) { throw UnauthorizedException("Invalid current password")
         }
@@ -56,7 +56,7 @@ class UserService(
         return userRepository.save(user)
     }
 
-    fun getLoginHistory(userId: Int): List<UserLoginHistory> {
+    fun getLoginHistory(userId: Long): List<UserLoginHistory> {
         return loginHistoryRepository.findByUserOrderByLoginTimeDesc(getUserById(userId))
     }
 
