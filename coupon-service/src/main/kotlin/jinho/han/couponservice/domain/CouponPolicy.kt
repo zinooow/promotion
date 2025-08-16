@@ -1,7 +1,6 @@
 package jinho.han.couponservice.domain
 
 import jakarta.persistence.*
-import jinho.han.couponservice.application.command.CouponPolicyCreateCommand
 import java.time.LocalDateTime
 
 @Entity
@@ -40,17 +39,27 @@ class CouponPolicy (
     val maxDiscountAmount: Int
 ) {
     companion object{
-        fun create(policyCreateCommand: CouponPolicyCreateCommand) = CouponPolicy(
+        fun create(
+            title: String,
+            description: String,
+            totalQuantity: Int,
+            startTime: LocalDateTime,
+            endTime: LocalDateTime,
+            discountType: DiscountType,
+            discountValue: Int,
+            minOrderAmount: Int,
+            maxDiscountAmount: Int
+        ) = CouponPolicy(
             id = null,
-            title = policyCreateCommand.title,
-            description = policyCreateCommand.description,
-            totalQuantity = policyCreateCommand.totalQuantity,
-            startTime = policyCreateCommand.startTime,
-            endTime = policyCreateCommand.endTime,
-            discountType = policyCreateCommand.discountType,
-            discountValue = policyCreateCommand.discountValue,
-            minOrderAmount = policyCreateCommand.minOrderAmount,
-            maxDiscountAmount = policyCreateCommand.maxDiscountAmount
+            title = title,
+            description = description,
+            totalQuantity = totalQuantity,
+            startTime = startTime,
+            endTime = endTime,
+            discountType = discountType,
+            discountValue = discountValue,
+            minOrderAmount = minOrderAmount,
+            maxDiscountAmount = maxDiscountAmount
         )
     }
 }

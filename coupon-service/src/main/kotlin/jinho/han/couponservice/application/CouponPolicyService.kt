@@ -12,7 +12,18 @@ class CouponPolicyService(
 ) {
 
     fun createPolicy(policyCreateCommand: CouponPolicyCreateCommand): CouponPolicyResult {
-        val createdPolicy = policyRepository.save(CouponPolicy.create(policyCreateCommand))
+        val createdPolicy = policyRepository.save(CouponPolicy.create(
+            title = policyCreateCommand.title,
+            description = policyCreateCommand.description,
+            totalQuantity = policyCreateCommand.totalQuantity,
+            startTime = policyCreateCommand.startTime,
+            endTime = policyCreateCommand.endTime,
+            discountType = policyCreateCommand.discountType,
+            discountValue = policyCreateCommand.discountValue,
+            minOrderAmount = policyCreateCommand.minOrderAmount,
+            maxDiscountAmount = policyCreateCommand.maxDiscountAmount
+        ))
+
         return CouponPolicyResult.from(createdPolicy);
     }
 }

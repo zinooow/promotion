@@ -15,19 +15,16 @@ import org.springframework.web.bind.annotation.RestController
 class CouponPolicyController(
     private val couponPolicyService: CouponPolicyService,
 ) {
-
     @PostMapping
     fun createCouponPolicy(
         @RequestBody policyCreateRequest: CouponPolicyCreateRequest
     ): ApiResponse<CouponPolicyResult> {
-
         return ApiResponse(
             code = HttpStatus.CREATED.value(),
             message = "Coupon Policy Create Success",
             data = couponPolicyService.createPolicy(policyCreateRequest.toCommand())
         )
     }
-
 
 }
 
