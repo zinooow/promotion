@@ -62,5 +62,10 @@ class CouponPolicy (
             maxDiscountAmount = maxDiscountAmount
         )
     }
+
+    fun validate() {
+        // 발행시간 검증 -> IllegalArgExp
+        require(this.startTime > LocalDateTime.now() || this.endTime < LocalDateTime.now()) { "id can't be null" }
+    }
 }
 

@@ -1,5 +1,6 @@
 package jinho.han.couponservice.application
 
+import jakarta.transaction.Transactional
 import jinho.han.couponservice.adapter.persistance.CouponPolicyRepository
 import jinho.han.couponservice.application.command.CouponPolicyCreateCommand
 import jinho.han.couponservice.application.result.CouponPolicyResult
@@ -12,8 +13,11 @@ class CouponPolicyService(
     private val policyRepository: CouponPolicyRepository
 ) {
 
-    fun createPolicy(policyCreateCommand: CouponPolicyCreateCommand): CouponPolicyResult =
-        policyRepository.save(CouponPolicy.create(
+    @Transactional
+    fun createPolicy(policyCreateCommand: CouponPolicyCreateCommand): CouponPolicyResult {
+        // TODO : validate
+
+        return policyRepository.save(CouponPolicy.create(
             title = policyCreateCommand.title,
             description = policyCreateCommand.description,
             totalQuantity = policyCreateCommand.totalQuantity,
@@ -24,6 +28,7 @@ class CouponPolicyService(
             minOrderAmount = policyCreateCommand.minOrderAmount,
             maxDiscountAmount = policyCreateCommand.maxDiscountAmount
         )).let(CouponPolicyResult::from)
+    }
 
     fun getCouponPolicy(id: Long): CouponPolicyResult? =
         policyRepository.findById(id).getOrNull()
