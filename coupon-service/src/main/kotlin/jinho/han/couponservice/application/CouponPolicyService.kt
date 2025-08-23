@@ -1,11 +1,11 @@
 package jinho.han.couponservice.application
 
-import jakarta.transaction.Transactional
 import jinho.han.couponservice.adapter.persistance.CouponPolicyRepository
 import jinho.han.couponservice.application.command.CouponPolicyCreateCommand
 import jinho.han.couponservice.application.result.CouponPolicyResult
 import jinho.han.couponservice.domain.CouponPolicy
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
 
 @Service
@@ -30,12 +30,15 @@ class CouponPolicyService(
         )).let(CouponPolicyResult::from)
     }
 
-    fun getCouponPolicy(id: Long): CouponPolicyResult? =
+
+    @Transactional(readOnly = true)
+    fun getCouponPolicyById(id: Long): CouponPolicyResult? =
         policyRepository.findById(id).getOrNull()
             ?.let { CouponPolicyResult.from(it) }
 
-
+    @Transactional(readOnly = true)
     fun getCouponPolicyList(): List<CouponPolicyResult> =
         policyRepository.findAll()
-            .map ( CouponPolicyResult::from )
+            .map (CouponPolicyResult::from)
+
 }

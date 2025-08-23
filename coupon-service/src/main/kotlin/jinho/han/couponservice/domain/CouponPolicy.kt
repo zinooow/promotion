@@ -1,6 +1,7 @@
 package jinho.han.couponservice.domain
 
 import jakarta.persistence.*
+import jinho.han.couponservice.application.exception.InvalidCouponPeriodException
 import java.time.LocalDateTime
 
 @Entity
@@ -64,8 +65,8 @@ class CouponPolicy (
     }
 
     fun validate() {
-        // 발행시간 검증 -> IllegalArgExp
-        require(this.startTime > LocalDateTime.now() || this.endTime < LocalDateTime.now()) { "id can't be null" }
+        // 발행시간 검증 -> IllegalArgumentException
+        require(this.startTime.isBefore(LocalDateTime.now()) || this.endTime.isAfter(LocalDateTime.now())) { throw InvalidCouponPeriodException("쿠폰 발급 가능한 기간이 아닙니다.") }
     }
 }
 

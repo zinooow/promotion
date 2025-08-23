@@ -4,15 +4,9 @@ import jinho.han.couponservice.adapter.web.dto.ApiResponse
 import jinho.han.couponservice.adapter.web.dto.CouponPolicyCreateRequest
 import jinho.han.couponservice.application.CouponPolicyService
 import jinho.han.couponservice.application.result.CouponPolicyResult
-import jinho.han.couponservice.domain.CouponPolicy
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/coupon-policies")
@@ -42,7 +36,7 @@ class CouponPolicyController(
     */
     @GetMapping("/{id}")
     fun getCouponPolicy(@PathVariable("id") id: Long): ResponseEntity<ApiResponse<CouponPolicyResult?>> =
-        couponPolicyService.getCouponPolicy(id)
+        couponPolicyService.getCouponPolicyById(id)
             ?.let { ResponseEntity.ok(
                 ApiResponse(code = HttpStatus.OK.value(), message = "Coupon Policy Get Success", data = it )
             )}
@@ -62,7 +56,16 @@ class CouponPolicyController(
     *   size (optional): 페이지 크기 (default: 10)
     */
     @GetMapping
-    fun getCouponPolicyList(): List<CouponPolicyResult> = couponPolicyService.getCouponPolicyList()
+    fun getCouponPolicyList(
+        @RequestParam(value = "page", defaultValue = "0") page: Int,
+        @RequestParam(value = "page_size", defaultValue = "10") pageSize: Int,
+    ): ApiResponse<List<CouponPolicyResult>> =
+        ApiResponse(
+            code = HttpStatus.OK.value(),
+            message = "success",
+            data = couponPolicyService.getCouponPolicyList()
+        )
+
 
 
 }
