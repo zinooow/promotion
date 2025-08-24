@@ -1,6 +1,5 @@
-package jinho.han.couponservice.application.command
+package jinho.han.couponservice.application.v1.command
 
-import jinho.han.couponservice.domain.DiscountType
 import java.time.LocalDateTime
 
 data class CouponPolicyCreateCommand(
@@ -9,7 +8,7 @@ data class CouponPolicyCreateCommand(
     val totalQuantity: Int,
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
-    val discountType: DiscountType,
+    val discountType: String,
     val discountValue: Int,
     val minOrderAmount: Int,
     val maxDiscountAmount: Int

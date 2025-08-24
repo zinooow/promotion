@@ -1,6 +1,5 @@
-package jinho.han.couponservice.application.exception
+package jinho.han.couponservice.domain.exception
 
 class InvalidCouponException: RuntimeException{
-    constructor(): super()
     constructor(message: String): super(message)
 }

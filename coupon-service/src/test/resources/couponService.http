@@ -42,4 +42,4 @@ Content-Type: application/json
 POST http://localhost:8005/api/v1/coupons/1/cancel
 
 ###사용자 쿠폰 목록 조회
-GET http://localhost:8005/api/v1/coupons/user/1
+GET http://localhost:8005/api/v1/coupons/user/100

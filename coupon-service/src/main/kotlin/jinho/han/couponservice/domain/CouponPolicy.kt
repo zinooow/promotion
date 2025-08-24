@@ -1,44 +1,53 @@
 package jinho.han.couponservice.domain
 
 import jakarta.persistence.*
-import jinho.han.couponservice.application.exception.InvalidCouponPeriodException
+import jinho.han.couponservice.domain.exception.InvalidCouponPeriodException
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "coupon_policy")
-class CouponPolicy (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+class CouponPolicy
+    private constructor(
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id: Long? = null,
 
-    @Column(nullable = false)
-    val title: String,
+        @Column(nullable = false)
+        val title: String,
 
-    @Column(nullable = false)
-    val description: String,
+        @Column(nullable = false)
+        val description: String,
 
-    @Column(nullable = false)
-    val totalQuantity: Int,
+        @Column(nullable = false)
+        val totalQuantity: Int,
 
-    @Column(nullable = false)
-    val startTime: LocalDateTime,
+        @Column(nullable = false)
+        val startTime: LocalDateTime,
 
-    @Column(nullable = false)
-    val endTime: LocalDateTime,
+        @Column(nullable = false)
+        val endTime: LocalDateTime,
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    val discountType: DiscountType,
+        @Column(nullable = false)
+        @Enumerated(EnumType.STRING)
+        val discountType: DiscountType,
 
-    @Column(nullable = false)
-    val discountValue: Int,
+        @Column(nullable = false)
+        val discountValue: Int,
 
-    @Column(nullable = false)
-    val minOrderAmount: Int,
+        @Column(nullable = false)
+        val minOrderAmount: Int,
 
-    @Column(nullable = false)
-    val maxDiscountAmount: Int
-) {
+        @Column(nullable = false)
+        val maxDiscountAmount: Int,
+
+        @Column
+        val createdAt: LocalDateTime = LocalDateTime.now(),
+    )
+{
+    enum class DiscountType {
+        FIXED_AMOUNT,
+        PERCENTAGE
+    }
     companion object{
         fun create(
             title: String,

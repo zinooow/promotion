@@ -3,9 +3,10 @@ package jinho.han.couponservice.adapter.web
 import jakarta.validation.Valid
 import jinho.han.couponservice.adapter.web.dto.ApiResponse
 import jinho.han.couponservice.adapter.web.dto.CouponIssueRequest
-import jinho.han.couponservice.application.CouponService
-import jinho.han.couponservice.application.command.CouponUseCommand
-import jinho.han.couponservice.application.result.CouponResult
+import jinho.han.couponservice.application.v1.CouponService
+import jinho.han.couponservice.application.v1.command.CouponUseCommand
+import jinho.han.couponservice.application.v1.result.CouponResult
+import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -86,7 +87,7 @@ class CouponController(
         @RequestParam(value = "page_size", defaultValue = "10") pageSize: Int,
         @PathVariable("userId") userId: Long
     ): ApiResponse<List<CouponResult>> {
-        val couponList = couponService.getCouponByUserId(userId)
+        val couponList = couponService.getCouponByUserId(userId, page, pageSize)
         return ApiResponse(
             code = if(couponList.isEmpty()) {HttpStatus.NOT_FOUND.value()} else {HttpStatus.OK.value()},
             message = if(couponList.isEmpty()) {"해당 조건에 맞는 결과가 없습니다."} else {"조회에 성공했습니다."},

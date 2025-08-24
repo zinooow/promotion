@@ -2,8 +2,8 @@ package jinho.han.couponservice.adapter.web
 
 import jinho.han.couponservice.adapter.web.dto.ApiResponse
 import jinho.han.couponservice.adapter.web.dto.CouponPolicyCreateRequest
-import jinho.han.couponservice.application.CouponPolicyService
-import jinho.han.couponservice.application.result.CouponPolicyResult
+import jinho.han.couponservice.application.v1.CouponPolicyService
+import jinho.han.couponservice.application.v1.result.CouponPolicyResult
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -59,14 +59,15 @@ class CouponPolicyController(
     fun getCouponPolicyList(
         @RequestParam(value = "page", defaultValue = "0") page: Int,
         @RequestParam(value = "page_size", defaultValue = "10") pageSize: Int,
-    ): ApiResponse<List<CouponPolicyResult>> =
-        ApiResponse(
-            code = HttpStatus.OK.value(),
-            message = "success",
-            data = couponPolicyService.getCouponPolicyList()
+    ): ApiResponse<List<CouponPolicyResult>> {
+
+        val policyList = couponPolicyService.getCouponPolicyList(page, pageSize)
+        return ApiResponse(
+            code = if(policyList.isEmpty()) {HttpStatus.NOT_FOUND.value()} else {HttpStatus.OK.value()},
+            message = if(policyList.isEmpty()) {"해당 조건에 맞는 결과가 없습니다."} else {"조회에 성공했습니다."},
+            data = policyList
         )
-
-
+    }
 
 }
 

@@ -1,9 +1,12 @@
-package jinho.han.couponservice.application
+package jinho.han.couponservice.application.v1
 
 import jinho.han.couponservice.adapter.persistance.CouponPolicyRepository
-import jinho.han.couponservice.application.command.CouponPolicyCreateCommand
-import jinho.han.couponservice.application.result.CouponPolicyResult
+import jinho.han.couponservice.application.v1.command.CouponPolicyCreateCommand
+import jinho.han.couponservice.application.v1.result.CouponPolicyResult
 import jinho.han.couponservice.domain.CouponPolicy
+import jinho.han.couponservice.util.enumValueOfSafe
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
@@ -23,7 +26,7 @@ class CouponPolicyService(
             totalQuantity = policyCreateCommand.totalQuantity,
             startTime = policyCreateCommand.startTime,
             endTime = policyCreateCommand.endTime,
-            discountType = policyCreateCommand.discountType,
+            discountType = enumValueOfSafe<CouponPolicy.DiscountType>(policyCreateCommand.discountType),
             discountValue = policyCreateCommand.discountValue,
             minOrderAmount = policyCreateCommand.minOrderAmount,
             maxDiscountAmount = policyCreateCommand.maxDiscountAmount
@@ -37,8 +40,7 @@ class CouponPolicyService(
             ?.let { CouponPolicyResult.from(it) }
 
     @Transactional(readOnly = true)
-    fun getCouponPolicyList(): List<CouponPolicyResult> =
-        policyRepository.findAll()
+    fun getCouponPolicyList(page: Int, pageSize: Int): List<CouponPolicyResult> =
+        policyRepository.findAll(PageRequest.of(page, pageSize, Sort.by("createdAt").descending())).content
             .map (CouponPolicyResult::from)
-
 }

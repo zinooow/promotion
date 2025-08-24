@@ -1,4 +1,4 @@
-package jinho.han.couponservice.application.result
+package jinho.han.couponservice.application.v1.result
 
 import jinho.han.couponservice.domain.Coupon
 import java.time.LocalDateTime
