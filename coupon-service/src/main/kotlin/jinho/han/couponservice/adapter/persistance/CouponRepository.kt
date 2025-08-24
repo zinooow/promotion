@@ -19,7 +19,7 @@ interface CouponRepository: JpaRepository<Coupon, Long> {
     fun countByCouponPolicyId(policyId: Long): Long
 
     fun findByUserIdAndStatusOrderByIssuedAtDesc(userId: Long, status: Coupon.Status, pageable: Pageable): Page<Coupon>
-    fun findByUserIdAndCouponPolicyAndStatusNot(userId: Long, couponPolicy: CouponPolicy, status: Coupon.Status): Coupon?
+    fun existsByUserIdAndCouponPolicyAndStatusNot(userId: Long, couponPolicy: CouponPolicy, status: Coupon.Status): Boolean
 
 
 }

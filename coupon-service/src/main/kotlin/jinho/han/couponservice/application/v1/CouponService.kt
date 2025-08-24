@@ -29,13 +29,13 @@ class CouponService(
         val couponPolicy = couponPolicyRepository.findById(command.couponPolicyId).getOrNull()
             ?: throw CouponPolicyNotFoundException()
 
-        require(couponPolicy.totalQuantity >couponRepository.countByCouponPolicyId(command.couponPolicyId)) {  }
+        require(couponPolicy.totalQuantity >couponRepository.countByCouponPolicyId(command.couponPolicyId)) { "쿠폰 발급 가능한 수량을 초과하였습니다." }
 
         couponPolicy.validate()
 
-        // 해당 유저 쿠폰 발급이력 확인
-        couponRepository.findByUserIdAndCouponPolicyAndStatusNot(command.userId, couponPolicy, Coupon.Status.CANCELLED)
-            ?.let{ throw CouponAlreadyIssuedException(it.id!!) }
+        // 해당 유저 쿠폰 발급이력 확
+        if(couponRepository.existsByUserIdAndCouponPolicyAndStatusNot(command.userId, couponPolicy, Coupon.Status.CANCELLED)) throw CouponAlreadyIssuedException()
+
 
         // 발급 후 저장
         return couponRepository.save(Coupon.issue(command.userId, couponPolicy))
