@@ -6,7 +6,6 @@ import jinho.han.couponservice.adapter.web.dto.CouponIssueRequest
 import jinho.han.couponservice.application.v1.CouponService
 import jinho.han.couponservice.application.v1.command.CouponUseCommand
 import jinho.han.couponservice.application.v1.result.CouponResult
-import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -56,18 +55,14 @@ class CouponController(
      * Description: 사용된 쿠폰을 취소 처리합니다.
      */
     @PostMapping("/{id}/cancel")
-    fun cancelCoupon(@PathVariable("id") couponId: Long, @RequestParam(required = false) reIssue: Boolean): ApiResponse<CouponResult?> {
-        val reIssuedCoupon = couponService.cancelCoupon(couponId, reIssue)
-        val message = if(!reIssue)
-            {"couponId:${couponId} 쿠폰의 취소가 완료되었습니다"}
-            else {
-                if(reIssuedCoupon == null){"쿠폰의 취소가 완료되었습니다. 해당 쿠폰은 만료된 쿠폰이므로, 재발급이 불가합니다."}
-                else {"쿠폰의 취소가 완료되었습니다. 해당 쿠폰의 재발급이 완료되었습니다."}
-            }
+    fun cancelCoupon(@PathVariable("id") couponId: Long): ApiResponse<CouponResult?> {
+        val canceledCoupon = couponService.cancelCoupon(couponId)
+        val message = "couponId:${couponId} 쿠폰의 취소가 완료되었습니다"
+
         return ApiResponse(
             code = 200,
             message = message,
-            data = reIssuedCoupon
+            data = CouponResult.from(canceledCoupon)
         )
     }
 

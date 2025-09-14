@@ -53,23 +53,11 @@ class CouponService(
     }
 
     @Transactional
-    fun cancelCoupon(couponId: Long, reIssue: Boolean): CouponResult? {
+    fun cancelCoupon(couponId: Long): Coupon {
         val coupon = couponRepository.findById(couponId).getOrNull()
             ?: throw CouponNotFoundException(couponId)
         coupon.cancel()
-        couponRepository.save(coupon)
-        // 발급 취소 후 만료 전이면 재발급
-        if(reIssue) {
-            try {
-                val reIssuedCoupon = coupon.reIssue()
-                couponRepository.save(reIssuedCoupon)
-                return CouponResult.from(reIssuedCoupon)
-            } catch(e: CouponExpiredException) {
-                return null
-            }
-        } else {
-            return null
-        }
+        return couponRepository.save(coupon)
     }
 
     @Transactional(readOnly = true)

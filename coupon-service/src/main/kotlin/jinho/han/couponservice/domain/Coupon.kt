@@ -78,7 +78,8 @@ class Coupon
 
     fun cancel() {
         require(this.status == Status.USED) { throw InvalidCouponException("사용된 쿠폰만 취소 가능합니다.") }
-        require(this.orderId == null) { throw InvalidCouponException("사용된 쿠폰의 주문ID가 유효하지 않습니다.") }
+        require(this.orderId != null) { throw InvalidCouponException("사용된 쿠폰의 주문ID가 유효하지 않습니다.") }
+        this.orderId = null
         this.status = Status.CANCELLED
     }
 
